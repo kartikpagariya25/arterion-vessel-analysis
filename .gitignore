@@ -1,0 +1,14 @@
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+venv/
+.venv*/
+*.onnx
+*.pt
+*.pth
+backend/app/static_uploads/
+training/data/
+training/artifacts/*
+!training/artifacts/metrics*.json
+!training/artifacts/*.png
