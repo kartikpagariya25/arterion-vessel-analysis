@@ -6,7 +6,7 @@ Thanks for looking at Arterion Vessel Analysis. This is a research prototype, so
 ```bash
 cd backend
 pip install -r requirements-dev.txt     # Python 3.11
-pytest tests -q                         # 7 tests, no weights needed
+pytest tests -q                         # 31 tests, no weights needed
 ```
 The tests use stand-in ONNX sessions, so they run without the trained weights. To try the real model, run `scripts/fetch_weights.sh` (or `.ps1`) first.
 
