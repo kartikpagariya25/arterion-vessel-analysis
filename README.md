@@ -30,6 +30,40 @@ Severity estimation was verified on a synthetic constriction with a known answer
 
 The stenosis model was initialised from the trained vessel model and fine-tuned (v1.1.0 weights; v1.0.0 had Dice 0.575). It still falls just short of the project's 0.60 target.
 
+## Accounts, history and the doctor dashboard
+
+Sign in from the top of the site to keep a history of your angiogram scans. Without an account everything still works; results just are not saved.
+
+- **Patients** register with an email and password. Every analysis they run while signed in is saved (the findings, not images or long signals) and listed on `history.html`, together with any note a doctor adds. They can delete single analyses, change their password or delete their account and all of its data.
+- **Doctors** get a dashboard on the same page: *Awaiting review*, *All analyses* (filter by type, status or patient), *Patients* and *My analyses*. They open any analysis and write a review note that the patient sees.
+- **Doctor sign-up needs an invite code.** Set `DOCTOR_INVITE_CODE` on the backend; with it unset, doctor registration is disabled. To create the first doctor (or reset a forgotten password; there is no email reset):
+
+```bash
+cd backend
+python -m app.accounts.cli create-user --email doc@example.com --name "Dr Doc" --role doctor
+python -m app.accounts.cli set-password --email someone@example.com
+```
+
+Under the hood: SQLite, passwords hashed with scrypt, HS256 JWTs, and a lockout after five failed logins per email (15 minutes). See [SECURITY.md](SECURITY.md) for what this does and does not protect.
+
+| Setting | Default | Meaning |
+|---|---|---|
+| `DATA_DIR` | `backend/data` (a Docker volume in compose) | where `arterion.db` and the generated JWT secret live |
+| `JWT_SECRET` | generated once, kept in `DATA_DIR` | signing key; set it to share tokens between replicas |
+| `JWT_EXPIRE_MINUTES` | `480` | token lifetime |
+| `DOCTOR_INVITE_CODE` | empty (doctor sign-up off) | code required to register as a doctor |
+| `REQUIRE_AUTH` | off | `1` makes every endpoint, uploads included, require a signed-in user |
+
+| Endpoint | Who | Purpose |
+|---|---|---|
+| `POST /auth/register`, `POST /auth/login` | anyone | create an account / get a token |
+| `GET /auth/me`, `POST /auth/password`, `DELETE /auth/me` | signed in | profile, change password, delete account and data |
+| `GET /history`, `GET /history/{id}`, `DELETE /history/{id}` | signed in | the caller's own saved analyses |
+| `GET /doctor/patients`, `GET /doctor/analyses[/{id}]` | doctor | all patients and their analyses |
+| `POST /doctor/analyses/{id}/review` | doctor | add or update a review note |
+
+Prediction endpoints take an optional `Authorization: Bearer <token>`; when present the result is saved and the response carries an `X-History-Id` header.
+
 ## Run it
 
 ```bash
