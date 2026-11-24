@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Accounts: JWT sign-in for patients and doctors, SQLite storage, saved analysis history, a doctor dashboard with review notes, an admin CLI, and `REQUIRE_AUTH` to enforce sign-in.
 - Project hygiene: CI, model card, contributing guide, issue templates, no-Docker run scripts.
 
 ## v1.0.0
