@@ -22,9 +22,11 @@ Videos are scanned every N frames and the most affected frame is returned.
 | Task | Dice | IoU | Precision | Recall |
 |---|---|---|---|---|
 | Vessel segmentation | 0.774 | 0.644 | 0.832 | 0.743 |
-| Stenosis segmentation | 0.575 | 0.428 | 0.561 | 0.683 |
+| Stenosis segmentation | 0.594 | 0.450 | 0.618 | 0.658 |
 
 Severity estimation was verified on a synthetic constriction with a known answer (predicted 70.0 %, expected 70 %). It has **not** been validated against clinical quantitative coronary angiography.
+
+The stenosis model was initialised from the trained vessel model and fine-tuned (v1.1.0 weights; v1.0.0 had Dice 0.575). It still falls just short of the project's 0.60 target.
 
 ## Run it
 
