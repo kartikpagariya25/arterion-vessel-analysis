@@ -52,6 +52,7 @@ def predict_video(file_url: str, frame_stride: int = 5) -> dict:
                 frame_idx += 1
                 continue
 
+            frame = cv2.resize(frame, (model_module.IMAGE_SIZE, model_module.IMAGE_SIZE))
             tensor = _preprocess(frame)
             vessel_mask = _run_model(model_module._vessel_session, tensor)
             stenosis_probs = _run_model_probs(model_module._stenosis_session, tensor)
@@ -76,6 +77,7 @@ def predict_video(file_url: str, frame_stride: int = 5) -> dict:
                 best_result = {
                     "frame_index": frame_idx,
                     "overlay_bytes": overlay_bytes,
+                    "original_bytes": model_module._encode_png(frame),
                     "lesions": lesions,
                 }
 
@@ -90,17 +92,20 @@ def predict_video(file_url: str, frame_stride: int = 5) -> dict:
         summary = "No significant stenosis detected across analyzed frames."
         key_frame = best_result["frame_index"] if best_result else None
         overlay_b64 = base64.b64encode(best_result["overlay_bytes"]).decode("utf-8") if best_result else None
+        original_b64 = base64.b64encode(best_result["original_bytes"]).decode("utf-8") if best_result else None
         lesions = []
     else:
         worst = max(best_result["lesions"], key=lambda l: l["stenosis_percent"])
         summary = f"Worst frame ({best_result['frame_index']}): {len(best_result['lesions'])} lesion(s), most severe ~{worst['stenosis_percent']}% ({worst['severity_band']}, {worst['confidence']}% confidence)."
         key_frame = best_result["frame_index"]
         overlay_b64 = base64.b64encode(best_result["overlay_bytes"]).decode("utf-8")
+        original_b64 = base64.b64encode(best_result["original_bytes"]).decode("utf-8")
         lesions = best_result["lesions"]
 
     return {
         "frames_analyzed": frames_analyzed,
         "key_frame_index": key_frame,
+        "original_image_base64": original_b64,
         "overlay_image_base64": overlay_b64,
         "lesions": lesions,
         "summary": summary,

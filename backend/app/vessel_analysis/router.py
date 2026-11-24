@@ -30,4 +30,5 @@ def predict_with_report(req: PredictRequest):
 
 @router.post("/predict-video")
 def predict_vessel_video(req: VideoPredictRequest):
-    return predict_video(req.file_url, frame_stride=req.frame_stride)
+    analysis = predict_video(req.file_url, frame_stride=req.frame_stride)
+    return {**analysis, "report": generate_report(analysis)}
