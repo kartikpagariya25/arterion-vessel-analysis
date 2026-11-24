@@ -1,0 +1,12 @@
+:root {
+  --acc-font: 'IBM Plex Sans',system-ui,sans-serif; --acc-head: 'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+  --acc-bg: #05080a; --acc-panel: #0a1115; --acc-panel2: #0e171c; --acc-field: #05080a;
+  --acc-ink: #d9e8ec; --acc-dim: #7a929c; --acc-line: #172730;
+  --acc-accent: #5ff2c0; --acc-accent-ink: #03130d;
+  --acc-danger: #ff5a4f; --acc-ok: #62e08a; --acc-warn: #ffc247;
+  --acc-radius: 4px; --acc-border: 1px solid var(--acc-line); --acc-shadow: 0 10px 30px rgba(0,0,0,.5); --acc-card-shadow: none;
+  --acc-head-weight: 600; --acc-head-style: normal; --acc-head-case: uppercase; --acc-head-track: .06em;
+  --acc-track: .04em; --acc-case: none;
+  --acc-page-bg: radial-gradient(1100px 500px at 80% -10%, rgba(95,242,192,.07), transparent 60%), #05080a; --acc-scrim: rgba(0,5,8,.78); --acc-glow: rgba(95,242,192,.18);
+  color-scheme: dark;
+}
