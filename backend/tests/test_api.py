@@ -36,7 +36,10 @@ def test_upload_empty_rejected():
     assert _upload(b"", "a.png").status_code == 400
 
 
-def test_predict_without_weights_returns_fallback():
+def test_predict_without_weights_returns_fallback(monkeypatch):
+    from app.vessel_analysis import model as m
+    monkeypatch.setattr(m, "_models_available", lambda: False)
+    monkeypatch.setattr(m, "_vessel_session", None)
     url = _upload(_png_bytes(), "a.png").json()["file_url"]
     r = client.post("/vessel-analysis/predict", json={"file_url": url})
     assert r.status_code == 200
