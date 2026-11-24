@@ -1,5 +1,7 @@
 # Arterion Vessel Analysis
 
+[![tests](https://github.com/kartikpagariya25/arterion-vessel-analysis/actions/workflows/test.yml/badge.svg)](https://github.com/kartikpagariya25/arterion-vessel-analysis/actions/workflows/test.yml) ![licence](https://img.shields.io/badge/licence-MIT-blue) ![python](https://img.shields.io/badge/python-3.11-blue)
+
 Coronary angiogram analysis in the browser: segments the vessel tree, finds narrowed segments (stenosis), estimates how narrow each one is, and writes a clinician report plus a plain-language patient report in English, Hindi and Marathi.
 
 ![Screenshot](docs/screenshot.jpg)
