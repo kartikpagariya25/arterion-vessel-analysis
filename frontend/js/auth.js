@@ -271,12 +271,15 @@
     });
     document.body.appendChild(overlay);
     overlay._setMode = setMode;
+    // never keep a previous person's email or password around, especially on a shared computer
+    overlay._reset = function () { form.reset(); role = "patient"; };
     setMode("login");
   }
 
   function openModal(mode, message) {
     if (!overlay) buildModal();
     lastFocus = document.activeElement;
+    overlay._reset();
     overlay._setMode(mode || "login", message);
     overlay.hidden = false;
     var first = overlay.querySelector(mode === "register" ? "#acc-name" : "#acc-email");
@@ -284,6 +287,7 @@
   }
   function closeModal() {
     if (!overlay) return;
+    overlay._reset();
     overlay.hidden = true;
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
