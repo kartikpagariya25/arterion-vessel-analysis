@@ -68,6 +68,13 @@ Tests: `cd backend && pytest tests`.
 
 `training/` holds the full pipeline (data download, COCO loader, U-Net, Dice + focal-Tversky loss, training, evaluation, ONNX export, severity analysis). See `training/IMPLEMENTATION.md`.
 
+## Documentation
+
+- [Model card](MODEL_CARD.md): data, results and limitations
+- [Changelog](CHANGELOG.md)
+- [Contributing](CONTRIBUTING.md)
+- [Security and privacy](SECURITY.md)
+
 ## Data and licences
 
 Code: MIT. Trained on [ARCADE](https://zenodo.org/records/8386059) (Popov et al., 2024) — see the dataset page for its terms.
