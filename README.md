@@ -72,6 +72,7 @@ Tests: `cd backend && pytest tests`.
 
 - [Model card](MODEL_CARD.md): data, results and limitations
 - [Changelog](CHANGELOG.md)
+- No Docker? Run `scripts/run_local.ps1` (Windows) or `scripts/run_local.sh` (macOS/Linux); it creates a virtual environment, starts the API on 8000 and the site on 8080. Needs Python 3.11.
 - [Contributing](CONTRIBUTING.md)
 - [Security and privacy](SECURITY.md)
 
