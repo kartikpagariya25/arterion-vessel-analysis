@@ -1,0 +1,6 @@
+* text=auto eol=lf
+*.ps1 text eol=crlf
+*.onnx binary
+*.png binary
+*.jpg binary
+*.mp4 binary
