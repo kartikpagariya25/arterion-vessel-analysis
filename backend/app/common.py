@@ -3,8 +3,11 @@ import os
 import uuid
 
 import requests
-from fastapi import APIRouter, File, HTTPException, Request, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, Request, UploadFile
 from fastapi.responses import JSONResponse
+
+from .accounts.deps import optional_user
+from .accounts.history import remember_upload
 
 UPLOAD_DIR = os.environ.get("UPLOAD_DIR", os.path.join(os.path.dirname(__file__), "static_uploads"))
 MAX_UPLOAD_BYTES = 200 * 1024 * 1024
@@ -22,7 +25,7 @@ async def invalid_input_handler(request, exc: InvalidInput):
 
 
 @router.post("/uploads")
-async def upload_file(request: Request, file: UploadFile = File(...)):
+async def upload_file(request: Request, file: UploadFile = File(...), user=Depends(optional_user)):
     data = await file.read(MAX_UPLOAD_BYTES + 1)
     if not data:
         raise HTTPException(status_code=400, detail="The uploaded file is empty.")
@@ -32,6 +35,7 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
     name = f"{uuid.uuid4().hex}{ext}"
     with open(os.path.join(UPLOAD_DIR, name), "wb") as f:
         f.write(data)
+    remember_upload(name, file.filename or name, user["id"] if user else None)
     base = str(request.base_url).rstrip("/")
     return {"file_url": f"{base}/static_uploads/{name}"}
 
