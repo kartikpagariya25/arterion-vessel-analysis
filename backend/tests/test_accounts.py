@@ -255,3 +255,20 @@ def test_cors_exposes_the_history_header(task_request):
     url, body = task_request.url, task_request.body
     r = client.post(url, json=body, headers={**auth(t), "Origin": "http://localhost:8080"})
     assert "x-history-id" in r.headers.get("access-control-expose-headers", "").lower()
+
+
+# ---------- admin CLI ----------
+
+def test_cli_creates_accounts_and_resets_passwords():
+    from app.accounts import cli
+
+    base = ["--email", "cli@example.com"]
+    assert cli.main(["create-user", *base, "--name", "Cli Doc", "--role", "doctor", "--password", "cli-password-1"]) == 0
+    ok = client.post("/auth/login", json={"email": "cli@example.com", "password": "cli-password-1"})
+    assert ok.status_code == 200 and ok.json()["user"]["role"] == "doctor"
+    assert cli.main(["create-user", *base, "--name", "Again", "--password", "cli-password-1"]) == 1  # duplicate
+    assert cli.main(["set-password", *base, "--password", "another-pass-22"]) == 0
+    assert client.post("/auth/login", json={"email": "cli@example.com", "password": "cli-password-1"}).status_code == 401
+    assert client.post("/auth/login", json={"email": "cli@example.com", "password": "another-pass-22"}).status_code == 200
+    assert cli.main(["set-password", "--email", "nobody@example.com", "--password", "another-pass-22"]) == 1
+    assert cli.main(["set-password", *base, "--password", "short"]) == 2
