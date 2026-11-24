@@ -4,10 +4,14 @@ services:
     ports: ["8000:8000"]
     environment:
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - DATA_DIR=/data
       - UPLOAD_DIR=/data/uploads
+      - JWT_SECRET=${JWT_SECRET:-}
+      - DOCTOR_INVITE_CODE=${DOCTOR_INVITE_CODE:-}
+      - REQUIRE_AUTH=${REQUIRE_AUTH:-}
     volumes:
       - ./backend/app/vessel_analysis/weights:/srv/app/vessel_analysis/weights:ro
-      - uploads:/data/uploads
+      - data:/data
     restart: unless-stopped
   frontend:
     build: ./frontend
@@ -15,4 +19,4 @@ services:
     depends_on: [backend]
     restart: unless-stopped
 volumes:
-  uploads:
+  data:

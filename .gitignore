@@ -12,3 +12,4 @@ training/data/
 training/artifacts/*
 !training/artifacts/metrics*.json
 !training/artifacts/*.png
+backend/data/
