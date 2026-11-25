@@ -35,7 +35,7 @@ def predict_video(file_url: str, frame_stride: int = 5) -> dict:
             "key_frame_index": None,
             "overlay_image_base64": None,
             "lesions": [],
-            "summary": "Vessel analysis model weights not found — training not yet completed.",
+            "summary": "Vessel analysis model weights not found, so training has not been completed.",
         }
 
     best_result = None

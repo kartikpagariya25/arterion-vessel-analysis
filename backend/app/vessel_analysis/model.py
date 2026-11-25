@@ -156,7 +156,7 @@ def predict(file_url: str) -> dict:
             "original_image_base64": None,
             "overlay_image_base64": None,
             "lesions": [],
-            "summary": "Vessel analysis model weights not found — training not yet completed.",
+            "summary": "Vessel analysis model weights not found, so training has not been completed.",
         }
 
     if image.shape[:2] != (IMAGE_SIZE, IMAGE_SIZE):
