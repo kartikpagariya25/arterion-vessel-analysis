@@ -15,7 +15,7 @@
       el.lastElementChild.textContent = "API online";
     } catch {
       el.className = "status bad";
-      el.lastElementChild.textContent = "API offline · " + API;
+      el.lastElementChild.textContent = "API offline at " + API;
     }
   }
   ping();
@@ -30,7 +30,7 @@
       });
       $("file").accept = mode === "video" ? "video/*" : "image/*";
       $("dropTitle").textContent = mode === "video" ? "Drop an angiogram video" : "Drop an angiogram frame";
-      $("dropHint").textContent = mode === "video" ? "MP4 or AVI · the most affected frame is reported" : "PNG or JPG · drag it here or click to browse";
+      $("dropHint").textContent = mode === "video" ? "MP4 or AVI, the most affected frame is reported" : "PNG or JPG, drag it here or click to browse";
       $("samples").hidden = mode === "video";
     })
   );
@@ -106,13 +106,13 @@
     const peak = lesions.reduce((m, l) => Math.max(m, l.stenosis_percent), 0);
     const worst = lesions.find((l) => l.stenosis_percent === peak);
     const band = worst ? worst.severity_band : "mild";
-    $("peak").textContent = lesions.length ? Math.round(peak) + "%" : "0";
+    $("peak").textContent = lesions.length ? Math.round(peak) + "%" : "0%";
     const arc = $("arc");
     arc.style.stroke = lesions.length ? COLORS[band] : "var(--mild)";
     requestAnimationFrame(() => (arc.style.strokeDashoffset = 314 - (314 * Math.min(peak, 100)) / 100));
     $("headline").textContent = lesions.length ? `${lesions.length} lesion${lesions.length > 1 ? "s" : ""} found` : "No significant stenosis";
     $("summary").textContent = res.summary || "";
-    $("meta").textContent = res.frames_analyzed ? `${res.frames_analyzed} frames scanned · key frame ${res.key_frame_index}` : "";
+    $("meta").textContent = res.frames_analyzed ? `${res.frames_analyzed} frames scanned, key frame ${res.key_frame_index}` : "";
 
     $("lcount").textContent = lesions.length;
     const box = $("lesions"); box.innerHTML = "";
@@ -121,7 +121,7 @@
       const d = document.createElement("div");
       d.className = "lesion"; d.style.setProperty("--c", COLORS[l.severity_band]);
       const [x, y, w, h] = l.bbox;
-      d.innerHTML = `<span class="n">#${i + 1}</span><div><b>${l.stenosis_percent}%</b><span>conf ${l.confidence}% · at (${x}, ${y}) · ${w}×${h}px</span></div><span class="badge">${l.severity_band}</span>`;
+      d.innerHTML = `<span class="n">#${i + 1}</span><div><b>${l.stenosis_percent}%</b><span>${l.confidence}% confidence, at (${x}, ${y}), ${w} by ${h} px</span></div><span class="badge">${l.severity_band}</span>`;
       box.appendChild(d);
     });
     report = res.report || null;
