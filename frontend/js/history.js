@@ -19,7 +19,7 @@
 
   /* ---------- result rendering ---------- */
   function scalar(v) {
-    if (v === null || v === undefined) return "—";
+    if (v === null || v === undefined) return "-";
     if (typeof v === "number") return String(Math.round(v * 10000) / 10000);
     return String(v);
   }
@@ -40,7 +40,7 @@
         dl.appendChild(h("div", { class: "nested" }, kv(v)));
       } else {
         dl.appendChild(h("dt", {}, pretty(k)));
-        dl.appendChild(h("dd", {}, Array.isArray(v) ? (v.length ? v.map(scalar).join(", ") : "—") : scalar(v)));
+        dl.appendChild(h("dd", {}, Array.isArray(v) ? (v.length ? v.map(scalar).join(", ") : "-") : scalar(v)));
       }
     });
     return dl;
@@ -51,7 +51,7 @@
     var li = h("li", { class: "acc-card" });
     var badge = h("span", { class: "acc-badge " + (item.reviewed ? "ok" : "wait") }, item.reviewed ? "Reviewed" : "Awaiting review");
     var top = h("div", { class: "top" }, h("span", { class: "task" }, taskName(item.task)), h("span", { class: "when" }, when(item.created_at)));
-    var meta = h("div", { class: "meta" }, item.input_name + (o.doctor && item.patient ? " · " + item.patient.name + " (" + item.patient.email + ")" : ""));
+    var meta = h("div", { class: "meta" }, item.input_name + (o.doctor && item.patient ? ", " + item.patient.name + " (" + item.patient.email + ")" : ""));
     var sum = h("p", { class: "sum" }, item.summary || "No summary recorded.");
     var detail = h("div", { class: "acc-detail", hidden: true });
     var toggle = h("button", { type: "button", class: "acc-btn", "aria-expanded": "false" }, "Details");
@@ -64,7 +64,7 @@
       if (head) detail.appendChild(h("p", {}, h("b", {}, head)));
       detail.appendChild(kv(d.result));
       var noteBox = h("div", { class: "acc-note", hidden: !d.doctor_note },
-        h("b", {}, d.reviewed_by ? "Doctor's note · " + d.reviewed_by + " · " + when(d.reviewed_at) : "Doctor's note"),
+        h("b", {}, d.reviewed_by ? "Doctor's note, " + d.reviewed_by + ", " + when(d.reviewed_at) : "Doctor's note"),
         h("span", {}, d.doctor_note || ""));
       detail.appendChild(noteBox);
       if (o.doctor) detail.appendChild(reviewForm(item, d, noteBox, badge, o));
@@ -110,7 +110,7 @@
         badge.className = "acc-badge ok"; badge.textContent = "Reviewed";
         noteBox.hidden = false;
         noteBox.lastChild.textContent = res.doctor_note;
-        noteBox.firstChild.textContent = "Doctor's note · " + res.reviewed_by + " · " + when(res.reviewed_at);
+        noteBox.firstChild.textContent = "Doctor's note, " + res.reviewed_by + ", " + when(res.reviewed_at);
         save.textContent = "Update review";
         out.appendChild(msg("Saved. The patient can now see this note.", "ok"));
         if (o.onReviewed) o.onReviewed();
@@ -159,7 +159,7 @@
         res.items.forEach(function (p) {
           ul.appendChild(h("li", {}, h("button", { type: "button", onclick: function () { patientFilter = p; goto("all"); } },
             h("span", { class: "n" }, p.name), h("span", { class: "e" }, p.email),
-            h("span", { class: "c" }, p.analyses + (p.analyses === 1 ? " analysis" : " analyses") + (p.awaiting_review ? " · " + p.awaiting_review + " awaiting review" : "") + (p.last_activity ? " · last " + when(p.last_activity) : "")))));
+            h("span", { class: "c" }, p.analyses + (p.analyses === 1 ? " analysis" : " analyses") + (p.awaiting_review ? ", " + p.awaiting_review + " awaiting review" : "") + (p.last_activity ? ", last " + when(p.last_activity) : "")))));
         });
         out.appendChild(ul);
       }).catch(function (e) { clear(out).appendChild(msg(e.message, "err")); });

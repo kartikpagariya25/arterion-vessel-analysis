@@ -1,12 +1,13 @@
 :root {
-  --acc-font: 'IBM Plex Sans',system-ui,sans-serif; --acc-head: 'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
-  --acc-bg: #05080a; --acc-panel: #0a1115; --acc-panel2: #0e171c; --acc-field: #05080a;
-  --acc-ink: #d9e8ec; --acc-dim: #7a929c; --acc-line: #172730;
-  --acc-accent: #5ff2c0; --acc-accent-ink: #03130d;
-  --acc-danger: #ff5a4f; --acc-ok: #62e08a; --acc-warn: #ffc247;
-  --acc-radius: 4px; --acc-border: 1px solid var(--acc-line); --acc-shadow: 0 10px 30px rgba(0,0,0,.5); --acc-card-shadow: none;
-  --acc-head-weight: 600; --acc-head-style: normal; --acc-head-case: uppercase; --acc-head-track: .06em;
-  --acc-track: .04em; --acc-case: none;
-  --acc-page-bg: radial-gradient(1100px 500px at 80% -10%, rgba(95,242,192,.07), transparent 60%), #05080a; --acc-scrim: rgba(0,5,8,.78); --acc-glow: rgba(95,242,192,.18);
-  color-scheme: dark;
+  --acc-font: 'Figtree',system-ui,sans-serif; --acc-head: 'Bricolage Grotesque','Figtree',system-ui,sans-serif;
+  --acc-bg: #e6f3f1; --acc-panel: #ffffff; --acc-panel2: #eef7f5; --acc-field: #ffffff;
+  --acc-ink: #0f2c31; --acc-dim: #4f6c70; --acc-line: rgba(15,44,49,.13);
+  --acc-accent: #0e7a72; --acc-accent-ink: #ffffff;
+  --acc-danger: #b8321f; --acc-ok: #1f8f74; --acc-warn: #b8741a;
+  --acc-radius: 22px; --acc-border: 1px solid rgba(255,255,255,.9); --acc-shadow: 0 30px 60px -28px rgba(15,70,76,.45); --acc-card-shadow: 0 24px 44px -30px rgba(15,70,76,.4);
+  --acc-head-weight: 700; --acc-head-style: normal; --acc-head-case: none; --acc-head-track: -.02em;
+  --acc-track: 0; --acc-case: none; --acc-pill: 999px; --acc-top: 12px;
+  --bg: #e6f3f1; --a1: #ffd2bd; --a2: #bfe6e1; --a3: #ffe3c9; --ease: cubic-bezier(.16, 1, .3, 1); --solid: #ffffff;
+  --acc-page-bg: radial-gradient(900px 520px at 90% -10%, #ffd0bd 0, transparent 60%), radial-gradient(800px 520px at -5% 8%, #bfe6e1 0, transparent 60%), #e6f3f1; --acc-scrim: rgba(15,44,49,.4); --acc-glow: rgba(14,122,114,.22);
+  color-scheme: light;
 }

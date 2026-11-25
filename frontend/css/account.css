@@ -6,9 +6,10 @@
 .acc-overlay input, .acc-page input, .acc-page textarea, .acc-page select { box-sizing: border-box; }
 
 /* account chip + menu */
-.acc-bar { position: fixed; top: 12px; right: 12px; z-index: 60; }
+.acc-bar { position: fixed; top: var(--acc-top, 12px); right: 12px; z-index: 60; }
 .acc-chip { display: inline-flex; align-items: center; gap: .6em; cursor: pointer; color: var(--acc-ink); background: var(--acc-panel);
-  border: 1px solid var(--acc-line); border-radius: var(--acc-radius); padding: .45em .9em; font-size: .85rem; letter-spacing: var(--acc-track); text-transform: var(--acc-case); box-shadow: var(--acc-shadow); }
+  border: 1px solid var(--acc-line); border-radius: var(--acc-pill, var(--acc-radius)); padding: .45em .95em; font-size: .85rem; letter-spacing: var(--acc-track); text-transform: var(--acc-case); box-shadow: var(--acc-shadow); transition: transform .3s cubic-bezier(.16,1,.3,1), border-color .2s; }
+.acc-chip:hover { transform: translateY(-1px); }
 .acc-chip:hover { border-color: var(--acc-accent); }
 .acc-chip:focus-visible, .acc-primary:focus-visible, .acc-x:focus-visible, .acc-menu :is(a, button):focus-visible, .acc-page :is(a, button, input, textarea, select):focus-visible, .acc-overlay input:focus-visible, .acc-overlay button:focus-visible { outline: 2px solid var(--acc-accent); outline-offset: 2px; }
 .acc-role { font-size: .7em; color: var(--acc-accent); border: 1px solid currentColor; border-radius: 99px; padding: .05em .55em; }
@@ -20,7 +21,7 @@
 /* dialog */
 .acc-overlay { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 1rem; background: var(--acc-scrim); }
 .acc-overlay[hidden] { display: none; }
-.acc-dialog { position: relative; width: min(26rem, 100%); max-height: calc(100vh - 2rem); overflow: auto; background: var(--acc-panel); color: var(--acc-ink);
+.acc-dialog { animation: acc-pop .45s cubic-bezier(.16,1,.3,1) both; position: relative; width: min(26rem, 100%); max-height: calc(100vh - 2rem); overflow: auto; background: var(--acc-panel); color: var(--acc-ink);
   border: var(--acc-border); border-radius: var(--acc-radius); box-shadow: var(--acc-shadow); padding: 1.5rem 1.5rem 1.4rem; }
 .acc-brand { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--acc-dim); margin: 0 0 .25rem; }
 .acc-dialog h2 { font-family: var(--acc-head); font-weight: var(--acc-head-weight); font-style: var(--acc-head-style); font-size: 1.6rem; line-height: 1.15; margin: 0 0 1rem; text-transform: var(--acc-head-case); letter-spacing: var(--acc-head-track); }
@@ -46,16 +47,20 @@
 .acc-primary:hover { filter: brightness(1.08); }
 .acc-primary:disabled { opacity: .55; cursor: wait; }
 
+@keyframes acc-pop { from { opacity: 0; transform: translateY(14px) scale(.97); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .acc-dialog { animation: none; } }
+
 /* toast */
 .acc-toast { position: fixed; right: 14px; bottom: 14px; z-index: 90; display: flex; gap: .9rem; align-items: center; max-width: min(24rem, calc(100vw - 28px)); background: var(--acc-panel); color: var(--acc-ink);
-  border: 1px solid var(--acc-accent); border-radius: var(--acc-radius); padding: .65rem .9rem; box-shadow: var(--acc-shadow); font-size: .9rem; opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity .2s, transform .2s; }
+  border: 1px solid var(--acc-accent); border-radius: var(--acc-pill, var(--acc-radius)); padding: .65rem 1.1rem; box-shadow: var(--acc-shadow); font-size: .9rem; opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity .2s, transform .2s; }
 .acc-toast.show { opacity: 1; transform: none; pointer-events: auto; }
 .acc-toast a, .acc-toast button { color: var(--acc-accent); background: none; border: 0; cursor: pointer; text-decoration: underline; white-space: nowrap; padding: 0; }
 
 /* history / dashboard page */
-body.acc-body { margin: 0; min-height: 100vh; background: var(--acc-page-bg); color: var(--acc-ink); font: 16px/1.55 var(--acc-font); }
+body.acc-body { margin: 0; min-height: 100vh; background: transparent; color: var(--acc-ink); font: 16px/1.55 var(--acc-font); }
 .acc-page { max-width: 62rem; margin: 0 auto; padding: 4.2rem 1rem 3rem; }
 .acc-page header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .5rem 1.5rem; margin-bottom: 1.4rem; }
+.acc-page .rise-in { animation: rise .8s var(--ease, cubic-bezier(.16,1,.3,1)) both; }
 .acc-page h1 { font-family: var(--acc-head); font-weight: var(--acc-head-weight); font-style: var(--acc-head-style); font-size: clamp(1.7rem, 4vw, 2.5rem); line-height: 1.1; margin: 0; text-transform: var(--acc-head-case); letter-spacing: var(--acc-head-track); }
 .acc-page a { color: var(--acc-accent); }
 .acc-page .back { font-size: .9rem; }
