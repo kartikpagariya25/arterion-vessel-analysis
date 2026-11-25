@@ -3,6 +3,7 @@ window.ARTERION_APP = {
   slug: "vessel-analysis",
   name: "Arterion Vessel Analysis",
   home: "index.html",
+  graphic: {type:"flow", colors:["#0e7a72","#d98a6a"]},
   tasks: {
     "vessel-analysis": "Vessel & stenosis scan",
     "vessel-analysis-video": "Angiogram video scan"
