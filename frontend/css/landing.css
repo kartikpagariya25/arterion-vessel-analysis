@@ -131,3 +131,8 @@ html.lp-anim .lp-badge, html.lp-anim .lp-hero h1 .ln, html.lp-anim .lp-lead, htm
 .lp-step h3 { margin-top: 24px; font: 600 18px var(--font-body); color: var(--ink); }
 .lp-step p { margin: 10px auto 0; max-width: 250px; color: var(--muted); font-size: 15px; line-height: 1.65; }
 
+
+.lp-tool { max-width: 1280px; margin: 0 auto; padding: 0 28px; }
+#analyze .card, #analyze .tile, #analyze .panel { background: #fff; backdrop-filter: none; -webkit-backdrop-filter: none; border: 1px solid var(--line); box-shadow: 0 1px 2px rgba(15, 23, 42, .04), 0 24px 48px -36px rgba(15, 23, 42, .4); }
+#analyze .spot::after { display: none; }
+
