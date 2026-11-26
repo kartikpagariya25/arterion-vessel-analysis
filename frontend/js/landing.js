@@ -36,3 +36,31 @@
   }
   window.LP.countUp = countUp;
 })();
+
+/* Landing motion, part 2a: GSAP + ScrollTrigger for nav state, read progress and the hero. */
+(function () {
+  "use strict";
+  var LP = window.LP || {}, $ = LP.$ || function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+  var nav = document.querySelector(".lp-nav");
+  function navState() { if (nav) nav.classList.toggle("scrolled", window.scrollY > 24); }
+  navState(); window.addEventListener("scroll", navState, { passive: true });
+  if (LP.reduce || !window.gsap || !window.ScrollTrigger) return;
+  var gsap = window.gsap, ST = window.ScrollTrigger;
+  gsap.registerPlugin(ST);
+  gsap.config({ nullTargetWarn: false });
+
+  // read-progress bar across the top
+  gsap.to(".lp-progress", { scaleX: 1, ease: "none", scrollTrigger: { trigger: document.body, start: "top top", end: "bottom bottom", scrub: 0.3 } });
+
+  // hero: the motif line draws itself, then drifts and fades as you leave the hero
+  var paths = $(".lp-motif path");
+  paths.forEach(function (p) {
+    var len = p.getTotalLength ? p.getTotalLength() : 0;
+    if (!len) return;
+    gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
+    gsap.to(p, { strokeDashoffset: 0, duration: 2.6, delay: 0.6, ease: "power2.out" });
+  });
+  gsap.to(".lp-motif", { yPercent: 28, opacity: 0.2, ease: "none", scrollTrigger: { trigger: ".lp-hero", start: "top top", end: "bottom top", scrub: true } });
+  gsap.to(".lp-hero-in", { yPercent: -8, opacity: 0.35, ease: "none", scrollTrigger: { trigger: ".lp-hero", start: "35% top", end: "bottom top", scrub: true } });
+
+})();
