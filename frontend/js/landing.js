@@ -151,3 +151,37 @@
     });
   });
 })();
+
+/* Theme: follows the system until you choose; the choice is remembered. The saved value is applied in <head> before first paint. */
+(function () {
+  "use strict";
+  var KEY = "arterion-theme", root = document.documentElement;
+  var mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+  function current() { return root.getAttribute("data-theme") || (mq && mq.matches ? "dark" : "light"); }
+  function paint(t) {
+    root.setAttribute("data-theme", t);
+    var m = document.querySelector('meta[name="theme-color"]');
+    var bg = getComputedStyle(root).getPropertyValue("--bg").trim();
+    if (m && bg) m.setAttribute("content", bg);
+    document.querySelectorAll(".lp-theme").forEach(function (b) {
+      b.setAttribute("aria-pressed", String(t === "dark"));
+      b.setAttribute("aria-label", t === "dark" ? "Switch to light theme" : "Switch to dark theme");
+    });
+  }
+  paint(current());
+  document.querySelectorAll(".lp-theme").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var next = current() === "dark" ? "light" : "dark";
+      root.classList.add("theme-anim");
+      paint(next);
+      try { localStorage.setItem(KEY, next); } catch (e) { /* private mode: still works for this visit */ }
+      window.dispatchEvent(new CustomEvent("themechange", { detail: next }));
+      setTimeout(function () { root.classList.remove("theme-anim"); }, 500);
+    });
+  });
+  // follow the system while the visitor has not chosen
+  if (mq && mq.addEventListener) mq.addEventListener("change", function (e) {
+    var saved = null; try { saved = localStorage.getItem(KEY); } catch (x) { /* ignore */ }
+    if (!saved) { paint(e.matches ? "dark" : "light"); window.dispatchEvent(new CustomEvent("themechange")); }
+  });
+})();
