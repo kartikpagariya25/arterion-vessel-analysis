@@ -167,3 +167,10 @@ html.lp-anim .lp-badge, html.lp-anim .lp-hero h1 .ln, html.lp-anim .lp-lead, htm
 .lp-cta-band h2 { font: var(--head-weight) clamp(32px, 4.4vw, 54px) / 1.12 var(--font-head); letter-spacing: -.02em; max-width: 18ch; margin: 0 auto; text-wrap: balance; }
 .lp-cta-band p { margin: 18px auto 0; color: var(--muted); font-size: 18px; max-width: 520px; }
 .lp-cta-band .lp-cta { margin-top: 34px; }
+
+.lp-foot { background: #fff; border-top: 1px solid var(--line); padding: 52px 0 40px; }
+.lp-foot-in { display: grid; grid-template-columns: 1.3fr 1fr; gap: 32px; align-items: start; }
+.lp-foot-tag { margin-top: 14px; font: italic 500 17px var(--font-head); color: var(--muted); }
+.lp-foot nav { display: flex; gap: 26px; justify-content: flex-end; flex-wrap: wrap; font-weight: 500; color: var(--muted); font-size: 14.5px; }
+.lp-foot nav a:hover { color: var(--brand-2); }
+.lp-legal { margin-top: 34px; padding-top: 22px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
