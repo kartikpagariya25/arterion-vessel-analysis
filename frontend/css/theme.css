@@ -1,0 +1,20 @@
+:root {
+  /* teal and white */
+  --brand-1: #115e59; --brand-2: #0f766e; --brand-3: #14b8a6; --bright: #5eead4;
+  --ink: #0b2a2a; --muted: #587472; --bg: #f7fcfb; --soft: #f0fdfa; --card: #ffffff; --line: #d8eae7;
+  --badge-bg: #ccfbf1; --badge-ink: #0f766e; --dark-1: #04201f; --dark-2: #115e59;
+  --glow-strong: rgba(15,118,110,.5);
+  --font-head: 'Newsreader', Georgia, serif; --font-body: 'Figtree', system-ui, sans-serif; --font-mono: 'DM Mono', ui-monospace, monospace; --head-weight: 600;
+  /* semantic colours kept from the tool */
+  --mild: #1f9a72;
+  --moderate: #d98a12;
+  --severe: #cf3b2e;
+  /* aliases the tool stylesheet reads */
+  --accent: var(--brand-2); --accent-ink: #ffffff; --accent-deep: var(--brand-1);
+  --accent-soft: color-mix(in srgb, var(--brand-2) 12%, #ffffff);
+  --solid: #ffffff; --surface: #ffffff; --dim: var(--muted); --paper: #ffffff;
+  --r-card: 20px; --r-media: 16px; --r-stage: 20px; --r-plate: 18px; --r-screen: 14px; --r-in: 16px;
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  --font: var(--font-body); --sans: var(--font-body); --display: var(--font-body); --mono: var(--font-mono);
+  --shadow: 0 1px 2px rgba(15, 23, 42, .04), 0 24px 48px -36px rgba(15, 23, 42, .4);
+}
