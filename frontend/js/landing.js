@@ -64,3 +64,64 @@
   gsap.to(".lp-hero-in", { yPercent: -8, opacity: 0.35, ease: "none", scrollTrigger: { trigger: ".lp-hero", start: "35% top", end: "bottom top", scrub: true } });
 
 })();
+
+/* Landing motion, part 2b: ScrollTrigger reveals for headings, cards, steps, metric bars and the call to action. */
+(function () {
+  "use strict";
+  var LP = window.LP || {}, $ = LP.$ || function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+  if (LP.reduce || !window.gsap || !window.ScrollTrigger) {
+    // static fallback: bars at full value, counters at their final number
+    $(".lp-bar .f").forEach(function (f) { f.style.transform = "none"; });
+    $("[data-count]").forEach(function (e) { e.textContent = (+e.dataset.count).toFixed(+(e.dataset.dec || 0)); });
+    $(".lp-rail i").forEach(function (r) { r.style.transform = "none"; });
+    return;
+  }
+  var gsap = window.gsap, ST = window.ScrollTrigger;
+  gsap.registerPlugin(ST);
+  gsap.config({ nullTargetWarn: false });
+
+  // section headings rise as they enter
+  $(".lp-head, .lp-ev > div:first-child").forEach(function (el) {
+    gsap.from(el.children, { y: 34, opacity: 0, duration: 0.9, ease: "power3.out", stagger: 0.1, scrollTrigger: { trigger: el, start: "top 82%", once: true } });
+  });
+
+  // feature cards: batched, staggered
+  ST.batch(".lp-card", { start: "top 88%", once: true, onEnter: function (els) { gsap.from(els, { y: 46, opacity: 0, scale: 0.97, duration: 0.85, ease: "power3.out", stagger: 0.1, overwrite: true }); } });
+
+  // steps: the rail fills with scroll and each numbered tile lights up as the rail reaches it
+  var steps = $(".lp-step");
+  if (steps.length) {
+    gsap.to(".lp-rail i", { scaleX: 1, ease: "none", scrollTrigger: { trigger: ".lp-steps", start: "top 72%", end: "bottom 62%", scrub: 0.6 } });
+    steps.forEach(function (s, i) {
+      gsap.from(s, { y: 40, opacity: 0, duration: 0.8, ease: "power3.out", delay: i * 0.08, scrollTrigger: { trigger: s, start: "top 88%", once: true } });
+      gsap.fromTo(s.querySelector(".lp-num"), { scale: 0.86 }, { scale: 1, ease: "back.out(2)", duration: 0.7, scrollTrigger: { trigger: s, start: "top 80%", toggleActions: "play none none reverse" } });
+    });
+  }
+
+  // evidence: the panel slides in, bars grow with a stagger, numbers count up
+  var panel = document.querySelector(".lp-panel");
+  if (panel) {
+    gsap.from(panel, { y: 60, opacity: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: panel, start: "top 85%", once: true } });
+    gsap.set(".lp-bar .f", { scaleX: 0 });
+    ST.create({ trigger: panel, start: "top 72%", once: true, onEnter: function () {
+      gsap.to(".lp-bar .f", { scaleX: 1, duration: 1.4, ease: "power3.out", stagger: 0.12 });
+      $(".lp-bar .n[data-count]").forEach(function (n) { if (LP.countUp) LP.countUp(n); });
+    } });
+  }
+  // generic counters outside the panel
+  $("[data-count]:not(.lp-bar .n)").forEach(function (el) { ST.create({ trigger: el, start: "top 90%", once: true, onEnter: function () { if (LP.countUp) LP.countUp(el); } }); });
+
+  // call-to-action and tool frame
+  gsap.from(".lp-cta-band .lp-wrap > *", { y: 30, opacity: 0, duration: 0.8, stagger: 0.1, ease: "power3.out", scrollTrigger: { trigger: ".lp-cta-band", start: "top 80%", once: true } });
+  gsap.from(".lp-tool", { y: 50, opacity: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: ".lp-tool", start: "top 90%", once: true } });
+
+  // active pill follows the section in view
+  var links = $(".lp-pills a");
+  links.forEach(function (a) {
+    var id = (a.getAttribute("href") || "").replace("#", ""), sec = id && document.getElementById(id);
+    if (!sec) return;
+    ST.create({ trigger: sec, start: "top 45%", end: "bottom 45%", onToggle: function (self) { if (self.isActive) { links.forEach(function (x) { x.classList.toggle("on", x === a); }); } } });
+  });
+  window.addEventListener("load", function () { ST.refresh(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ST.refresh(); });
+})();
