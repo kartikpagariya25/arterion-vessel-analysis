@@ -1,0 +1,15 @@
+{
+  "name": "Arterion Vessel Analysis",
+  "short_name": "Arterion Vessel",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f7fcfb",
+  "theme_color": "#0f766e",
+  "icons": [
+    {
+      "src": "assets/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
