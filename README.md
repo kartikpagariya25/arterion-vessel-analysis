@@ -71,6 +71,7 @@ The site follows one landing-page system: a floating navigation (logo mark, cent
 - **Palette:** teal and white. Tokens live in `frontend/css/theme.css`.
 - **Type:** Newsreader for headlines, Figtree for text, DM Mono for numbers.
 - **Motion:** GSAP ScrollTrigger drives scroll progress, reveals, the rail that connects the steps and the metric bars. Motion (the vanilla build of the Framer Motion engine) drives the hero entrance, button springs and count-ups. Everything collapses to a static page under `prefers-reduced-motion`.
+- **Themes:** light and dark. The toggle in the navigation follows your system until you choose, and remembers the choice. Tokens for both live in `frontend/css/theme.css`.
 - **Details:** see [DESIGN.md](DESIGN.md).
 
 ## Run it
