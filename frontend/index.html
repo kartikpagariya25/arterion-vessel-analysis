@@ -4,126 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Arterion Vessel Analysis</title>
-<meta name="description" content="Coronary vessel segmentation, stenosis detection and severity estimation on angiograms. Research prototype.">
-<meta name="theme-color" content="#e6f3f1">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Arterion Vessel Analysis">
-<meta property="og:description" content="Coronary vessel segmentation, stenosis detection and severity estimation on angiograms. Research prototype.">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="manifest" href="site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500;1,6..72,600;1,6..72,700&family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='10' fill='%230e7a72'/%3E%3Cpath d='M16 5v9m0 0l-7 6m7-6l7 6m-7-6v13' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
-<link rel="stylesheet" href="css/fx.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/landing.css">
 <link rel="stylesheet" href="css/app.css">
 <link rel="stylesheet" href="css/account-theme.css">
 <link rel="stylesheet" href="css/account.css">
 </head>
 <body>
 <noscript><p style="padding:1rem;font:16px sans-serif">This page needs JavaScript to upload a file and show the result.</p></noscript>
-
-<header class="bar rise" style="--i:0">
-  <div class="bar-in">
-    <div class="brand">
-      <span class="mark"><i class="ph-bold ph-tree-structure" aria-hidden="true"></i></span>
-      <b>Arterion</b><span class="sub">Vessel Analysis</span>
-    </div>
-    <div class="status" id="status" role="status"><i></i><span>Connecting</span></div>
-  </div>
-</header>
-
-<section class="hero">
-  <h1 class="rise" style="--i:1">See exactly where the vessels narrow</h1>
-  <p class="rise" style="--i:2">Upload a coronary angiogram. The model traces the vessel tree and grades every narrowed segment.</p>
-</section>
-
-<main class="lab">
-  <section class="monitor rise" style="--i:3" aria-label="Angiogram viewer">
-    <div class="modes" role="tablist">
-      <div class="seg">
-        <button role="tab" class="on press" data-mode="image" aria-selected="true"><i class="ph-bold ph-image" aria-hidden="true"></i>Still image</button>
-        <button role="tab" class="press" data-mode="video" aria-selected="false"><i class="ph-bold ph-film-strip" aria-hidden="true"></i>Video</button>
-      </div>
-      <span class="spacer"></span>
-      <div class="views seg" id="views" hidden>
-        <button data-view="split" class="on">Split</button>
-        <button data-view="overlay">Overlay</button>
-        <button data-view="original">Original</button>
-      </div>
-    </div>
-
-    <div class="screen" id="screen">
-      <label class="drop" id="drop" for="file">
-        <span class="orb"><i class="ph-bold ph-upload-simple" aria-hidden="true"></i></span>
-        <strong id="dropTitle">Drop an angiogram frame</strong>
-        <span class="hint" id="dropHint">PNG or JPG, drag it here or click to browse</span>
-        <input id="file" type="file" accept="image/*" hidden>
-      </label>
-
-      <div class="stage" id="stage" hidden>
-        <img id="imgOriginal" alt="Original angiogram frame">
-        <img id="imgOverlay" alt="Analysis overlay with vessels and stenosis marked">
-        <div class="handle" id="handle" aria-hidden="true"><span></span></div>
-        <input type="range" min="0" max="100" value="50" id="slider" aria-label="Compare original and overlay">
-        <span class="tag tag-l" id="tagL">Original</span><span class="tag tag-r" id="tagR">Analysis</span>
-      </div>
-
-      <div class="busy" id="busy" hidden><div class="sweep"></div><div class="busy-in"><div class="pulse"><i></i><i></i></div><b id="busyText">Analysing</b></div></div>
-    </div>
-
-    <div class="actions">
-      <div class="samples" id="samples">
-        <span>Try a sample</span>
-        <button class="press" data-sample="samples/sample-1.png">Case 1</button>
-        <button class="press" data-sample="samples/sample-2.png">Case 2</button>
-      </div>
-      <button class="ghost press" id="reset" hidden><i class="ph-bold ph-arrow-counter-clockwise" aria-hidden="true"></i>New study</button>
-    </div>
-    <div class="notice" id="notice" hidden></div>
-    <div class="notice err" id="error" hidden></div>
-  </section>
-
-  <aside class="side" id="side" aria-live="polite">
-    <div class="card spot idle rise" style="--i:4" id="idle">
-      <h2>How severity is graded</h2>
-      <p>Narrowing is the lesion width compared with the neighbouring healthy vessel, measured along the vessel centreline.</p>
-      <ul class="legend">
-        <li><i class="d mild"></i>Mild, under 50%</li>
-        <li><i class="d moderate"></i>Moderate, 50 to 70%</li>
-        <li><i class="d severe"></i>Severe, over 70%</li>
-      </ul>
-    </div>
-
-    <div id="results" hidden>
-      <div class="card spot gauge">
-        <div class="ring" id="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" class="track"/><circle cx="60" cy="60" r="50" class="arc" id="arc"/></svg><div><b id="peak">0</b><small>peak narrowing</small></div></div>
-        <div class="gtext"><h2 id="headline"></h2><p id="summary"></p><p class="meta" id="meta"></p></div>
-      </div>
-
-      <div class="card spot">
-        <h2>Lesions <span class="count" id="lcount">0</span></h2>
-        <div class="lesions" id="lesions"></div>
-      </div>
-
-      <div class="card spot">
-        <div class="rtabs" role="tablist" id="rtabs">
-          <button class="on" data-r="doctor">Clinician</button>
-          <button data-r="en">Patient (EN)</button>
-          <button data-r="hi">हिन्दी</button>
-          <button data-r="mr">मराठी</button>
-        </div>
-        <div class="report" id="report"></div>
-      </div>
-    </div>
-  </aside>
-</main>
-
-<footer class="foot">Research prototype, not a medical device. Outputs are AI-assisted screening aids and must be reviewed by a qualified cardiologist. <a href="https://github.com/kartikpagariya25/arterion-vessel-analysis">Source on GitHub</a></footer>
-
 <script src="js/config.js"></script>
 <script src="js/account-config.js"></script>
 <script src="js/auth.js"></script>
-<script src="js/fx.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
