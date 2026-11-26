@@ -74,6 +74,8 @@ The site follows one landing-page system: a floating navigation (logo mark, cent
 - **Themes:** light and dark. The toggle in the navigation follows your system until you choose, and remembers the choice. Tokens for both live in `frontend/css/theme.css`.
 - **Details:** see [DESIGN.md](DESIGN.md).
 
+![Dark mode](docs/screenshot-dark.jpg)
+
 ## Run it
 
 ```bash
