@@ -70,7 +70,7 @@
   <div class="lp-wrap"><div class="lp-head"><span class="lp-pill"><i class="ph-bold ph-flask" aria-hidden="true"></i>Live Tool</span><h2 class="lp-h2">Run an Analysis</h2><p class="lp-sub">Drop in a frame or video, then drag the slider to compare.</p></div></div>
   <div class="lp-tool">
     <main class="lab">
-      <section class="monitor rise" style="--i:3" aria-label="Angiogram viewer">
+      <section class="monitor" aria-label="Angiogram viewer">
         <div class="modes" role="tablist">
           <div class="seg">
             <button role="tab" class="on press" data-mode="image" aria-selected="true"><i class="ph-bold ph-image" aria-hidden="true"></i>Still image</button>
@@ -116,7 +116,7 @@
       </section>
 
       <aside class="side" id="side" aria-live="polite">
-        <div class="card spot idle rise" style="--i:4" id="idle">
+        <div class="card idle" id="idle">
           <h2>How severity is graded</h2>
           <p>Narrowing is the lesion width compared with the neighbouring healthy vessel, measured along the vessel centreline.</p>
           <ul class="legend">
@@ -127,17 +127,17 @@
         </div>
 
         <div id="results" hidden>
-          <div class="card spot gauge">
+          <div class="card gauge">
             <div class="ring" id="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" class="track"/><circle cx="60" cy="60" r="50" class="arc" id="arc"/></svg><div><b id="peak">0</b><small>peak narrowing</small></div></div>
             <div class="gtext"><h2 id="headline"></h2><p id="summary"></p><p class="meta" id="meta"></p></div>
           </div>
 
-          <div class="card spot">
+          <div class="card">
             <h2>Lesions <span class="count" id="lcount">0</span></h2>
             <div class="lesions" id="lesions"></div>
           </div>
 
-          <div class="card spot">
+          <div class="card">
             <div class="rtabs" role="tablist" id="rtabs">
               <button class="on" data-r="doctor">Clinician</button>
               <button data-r="en">Patient (EN)</button>
