@@ -1,0 +1,33 @@
+/* Landing system: base. Tokens come from theme.css (generated per site). */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 84px; color-scheme: light; }
+body { background: var(--bg); color: var(--ink); font: 400 16px/1.65 var(--font-body); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+img, svg { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 3px solid color-mix(in srgb, var(--brand-2) 45%, transparent); outline-offset: 3px; border-radius: 6px; }
+.lp-wrap { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+::selection { background: color-mix(in srgb, var(--brand-3) 28%, transparent); }
+
+/* buttons */
+.lp-btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 14px 26px; border-radius: 12px; font: 600 15px var(--font-body); letter-spacing: .005em; white-space: nowrap; transition: box-shadow .3s, background .3s, border-color .3s, color .3s; will-change: transform; }
+.lp-btn-primary { color: #fff; background: linear-gradient(135deg, var(--brand-1), var(--brand-2)); box-shadow: 0 12px 26px -12px var(--glow-strong), inset 0 1px 0 rgba(255, 255, 255, .22); }
+.lp-btn-primary:hover { box-shadow: 0 18px 32px -12px var(--glow-strong), inset 0 1px 0 rgba(255, 255, 255, .22); }
+.lp-btn-ghost { color: var(--brand-2); background: #fff; border: 1px solid color-mix(in srgb, var(--brand-2) 28%, var(--line)); }
+.lp-btn-ghost:hover { border-color: var(--brand-2); background: var(--soft); }
+.lp-btn-light { color: var(--brand-1); background: #fff; box-shadow: 0 14px 30px -14px rgba(0, 0, 0, .5); }
+.lp-btn-outline { color: #fff; border: 1px solid rgba(255, 255, 255, .5); }
+.lp-btn-outline:hover { background: rgba(255, 255, 255, .12); }
+.lp-btn i { font-size: 17px; }
+.lp-btn-sm { padding: 10px 20px; font-size: 14px; border-radius: 10px; }
+
+/* section heads */
+.lp-section { padding: 112px 0; position: relative; }
+.lp-soft { background: var(--soft); }
+.lp-head { text-align: center; max-width: 740px; margin: 0 auto 60px; }
+.lp-pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; border-radius: 999px; background: var(--badge-bg); color: var(--badge-ink); font: 600 12.5px var(--font-body); letter-spacing: .02em; }
+.lp-h2 { margin-top: 20px; font: var(--head-weight) clamp(32px, 4.2vw, 50px) / 1.12 var(--font-head); letter-spacing: -.015em; color: var(--ink); text-wrap: balance; }
+.lp-sub { margin-top: 16px; color: var(--muted); font-size: 17.5px; line-height: 1.65; }
+.lp-sub em, .lp-lead em { font-style: italic; color: color-mix(in srgb, var(--ink) 80%, var(--muted)); }
