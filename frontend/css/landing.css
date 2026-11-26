@@ -79,3 +79,37 @@ a { color: inherit; text-decoration: none; }
   .lp-menu .acc-signin { text-align: left; width: 100%; padding: 13px 14px; border-radius: 12px; font-weight: 500; }
   .lp-menu #acc-slot-m { padding: 4px 0; }
 }
+
+/* Hero: pill badge, serif headline with an italic gradient second line, two CTAs, check-badges, motif line. */
+.lp-hero { position: relative; min-height: 100vh; min-height: 100svh; display: grid; align-items: center; text-align: center; padding: 150px 0 130px; overflow: hidden;
+  background:
+    radial-gradient(900px 520px at 12% 18%, color-mix(in srgb, var(--brand-3) 16%, transparent), transparent 62%),
+    radial-gradient(800px 520px at 92% 8%, color-mix(in srgb, var(--brand-2) 12%, transparent), transparent 60%),
+    radial-gradient(700px 500px at 60% 100%, color-mix(in srgb, var(--bright) 14%, transparent), transparent 62%),
+    var(--bg); }
+.lp-hero-in { position: relative; z-index: 2; }
+.lp-badge { display: inline-flex; align-items: center; gap: 9px; padding: 8px 18px; border-radius: 999px; background: rgba(255, 255, 255, .78); border: 1px solid color-mix(in srgb, var(--brand-2) 22%, var(--line)); color: var(--badge-ink); font: 600 13px var(--font-body); box-shadow: 0 8px 22px -16px var(--glow-strong); backdrop-filter: blur(8px); }
+.lp-badge i { font-size: 15px; }
+.lp-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: #16a34a; }
+/* Entrance: hidden only while a script will animate them (flag set in <head>), and always revealed after 4.5s as a failsafe. */
+html.lp-anim .lp-badge, html.lp-anim .lp-hero h1 .ln, html.lp-anim .lp-lead, html.lp-anim .lp-cta .lp-btn, html.lp-anim .lp-checks li { opacity: 0; animation: lp-failsafe .01s 4.5s forwards; }
+@keyframes lp-failsafe { to { opacity: 1; } }
+.lp-hero h1 .ln { display: block; }
+.lp-hero h1 { margin: 28px auto 0; max-width: 16ch; font: var(--head-weight) clamp(44px, 7vw, 84px) / 1.06 var(--font-head); letter-spacing: -.025em; color: var(--ink); text-wrap: balance; }
+.lp-hero h1 em { display: inline-block; font-style: italic; padding: 0 .06em .08em; background: linear-gradient(100deg, var(--brand-1), var(--brand-3)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.lp-lead { margin: 26px auto 0; max-width: 660px; color: var(--muted); font-size: clamp(17px, 1.7vw, 20px); line-height: 1.7; }
+.lp-cta { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-top: 40px; }
+.lp-checks { list-style: none; padding: 0; margin: 36px 0 0; display: flex; flex-wrap: wrap; gap: 10px 28px; justify-content: center; color: var(--muted); font-size: 13.5px; }
+.lp-checks li { display: inline-flex; align-items: center; gap: 8px; }
+.lp-checks i { color: #16a34a; font-size: 15px; }
+.lp-motif { position: absolute; left: 0; right: 0; bottom: 56px; z-index: 1; width: 100%; height: 150px; color: var(--brand-2); pointer-events: none; overflow: visible; }
+.lp-motif path, .lp-motif circle { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; opacity: .16; vector-effect: non-scaling-stroke; }
+.lp-motif .fill { fill: currentColor; stroke: none; opacity: .08; }
+.lp-scroll { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 3; width: 24px; height: 38px; border-radius: 14px; border: 2px solid color-mix(in srgb, var(--brand-2) 38%, transparent); }
+.lp-scroll::after { content: ""; position: absolute; left: 50%; top: 7px; width: 4px; height: 8px; margin-left: -2px; border-radius: 3px; background: var(--brand-2); animation: lp-wheel 1.9s ease-in-out infinite; }
+@keyframes lp-wheel { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateY(12px); } }
+@media (max-width: 640px) {
+  .lp-hero { padding: 120px 0 110px; }
+  .lp-cta .lp-btn { width: 100%; }
+  .lp-motif { height: 110px; bottom: 60px; }
+}
