@@ -129,11 +129,14 @@
 
   /* ---------- account bar ---------- */
   function renderBar() {
-    var bar = document.getElementById("acc-bar");
+    document.querySelectorAll("[data-acc-open]").forEach(function (b) { b.hidden = !!state.user; });
+    // inside the page navigation when it has a slot, else a floating bar
+    var slot = document.getElementById("acc-slot");
+    var bar = slot || document.getElementById("acc-bar");
     if (!bar) { bar = h("div", { id: "acc-bar", class: "acc-bar" }); document.body.appendChild(bar); }
     bar.textContent = "";
     if (!state.user) {
-      bar.appendChild(h("button", { type: "button", class: "acc-chip", onclick: function () { openModal("login"); } }, "Sign in"));
+      bar.appendChild(h("button", { type: "button", class: slot ? "acc-signin" : "acc-chip", onclick: function () { openModal("login"); } }, slot ? "Sign In" : "Sign in"));
       place();
       return;
     }
@@ -159,6 +162,7 @@
 
   /* Keep the bar clear of the site's own status pill when that sits in the top-right corner. */
   function place() {
+    if (document.getElementById("acc-slot")) return;
     var bar = document.getElementById("acc-bar");
     if (!bar) return;
     var right = 12;
@@ -307,6 +311,7 @@
 
   function start() {
     renderBar();
+    document.querySelectorAll("[data-acc-open]").forEach(function (b) { b.addEventListener("click", function () { openModal("login"); }); });
     if (state.token) {
       call("GET", "/auth/me").then(function (u) { state.user = u; persist(); emit(); }).catch(function () { /* offline: keep what we have */ });
     }
