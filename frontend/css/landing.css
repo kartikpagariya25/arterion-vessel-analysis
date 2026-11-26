@@ -161,3 +161,9 @@ html.lp-anim .lp-badge, html.lp-anim .lp-hero h1 .ln, html.lp-anim .lp-lead, htm
 .lp-legend i { width: 10px; height: 10px; border-radius: 3px; background: var(--bright); }
 .lp-legend i.warn { background: #fbbf24; }
 
+
+/* CTA band + footer */
+.lp-cta-band { padding: 96px 0; text-align: center; background: radial-gradient(700px 360px at 50% 0, color-mix(in srgb, var(--brand-3) 14%, transparent), transparent 70%), var(--bg); }
+.lp-cta-band h2 { font: var(--head-weight) clamp(32px, 4.4vw, 54px) / 1.12 var(--font-head); letter-spacing: -.02em; max-width: 18ch; margin: 0 auto; text-wrap: balance; }
+.lp-cta-band p { margin: 18px auto 0; color: var(--muted); font-size: 18px; max-width: 520px; }
+.lp-cta-band .lp-cta { margin-top: 34px; }
