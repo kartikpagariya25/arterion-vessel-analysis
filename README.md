@@ -64,6 +64,15 @@ Under the hood: SQLite, passwords hashed with scrypt, HS256 JWTs, and a lockout 
 
 Prediction endpoints take an optional `Authorization: Bearer <token>`; when present the result is saved and the response carries an `X-History-Id` header.
 
+## Design
+
+The site follows one landing-page system: a floating navigation (logo mark, centre pills, sign-in, Get Started), a hero with a serif headline and an italic gradient second line, six feature cards, a four-step process, the working tool, a dark evidence section with the real held-out metrics, a call to action and a footer.
+
+- **Palette:** teal and white. Tokens live in `frontend/css/theme.css`.
+- **Type:** Newsreader for headlines, Figtree for text, DM Mono for numbers.
+- **Motion:** GSAP ScrollTrigger drives scroll progress, reveals, the rail that connects the steps and the metric bars. Motion (the vanilla build of the Framer Motion engine) drives the hero entrance, button springs and count-ups. Everything collapses to a static page under `prefers-reduced-motion`.
+- **Details:** see [DESIGN.md](DESIGN.md).
+
 ## Run it
 
 ```bash
