@@ -174,3 +174,27 @@ html.lp-anim .lp-badge, html.lp-anim .lp-hero h1 .ln, html.lp-anim .lp-lead, htm
 .lp-foot nav { display: flex; gap: 26px; justify-content: flex-end; flex-wrap: wrap; font-weight: 500; color: var(--muted); font-size: 14.5px; }
 .lp-foot nav a:hover { color: var(--brand-2); }
 .lp-legal { margin-top: 34px; padding-top: 22px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+@media (max-width: 980px) {
+  .lp-section { padding: 84px 0; }
+  .lp-features { grid-template-columns: 1fr 1fr; }
+  .lp-steps { grid-template-columns: 1fr 1fr; row-gap: 44px; }
+  .lp-rail { display: none; }
+  .lp-tool { padding: 0 16px; }
+}
+@media (max-width: 640px) {
+  .lp-features { grid-template-columns: 1fr; }
+  .lp-head { margin-bottom: 40px; }
+}
+
+@media (max-width: 980px) {
+  .lp-ev { grid-template-columns: 1fr; gap: 44px; }
+  .lp-foot-in { grid-template-columns: 1fr; }
+  .lp-foot nav { justify-content: flex-start; }
+}
+@media (max-width: 560px) {
+  .lp-bar { grid-template-columns: 1fr 52px; }
+  .lp-bar .t { grid-column: 1 / -1; grid-row: 2; }
+  .lp-panel { padding: 22px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .lp-scroll::after, .status.ok i { animation: none; } }
