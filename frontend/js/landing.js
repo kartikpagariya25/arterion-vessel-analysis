@@ -125,3 +125,29 @@
   window.addEventListener("load", function () { ST.refresh(); });
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ST.refresh(); });
 })();
+
+/* Landing UI: mobile menu, hero line splitting, "try a sample" hand-off to the tool. */
+(function () {
+  "use strict";
+  var $ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+
+  var burger = document.querySelector(".lp-burger"), menu = document.querySelector(".lp-menu");
+  if (burger && menu) {
+    var close = function () { menu.classList.remove("open"); burger.setAttribute("aria-expanded", "false"); burger.innerHTML = '<i class="ph-bold ph-list" aria-hidden="true"></i>'; };
+    burger.addEventListener("click", function () {
+      var open = menu.classList.toggle("open");
+      burger.setAttribute("aria-expanded", String(open));
+      burger.innerHTML = '<i class="ph-bold ' + (open ? "ph-x" : "ph-list") + '" aria-hidden="true"></i>';
+    });
+    menu.addEventListener("click", function (e) { if (e.target.closest("a")) close(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+  }
+
+  // secondary hero CTA can hand a sample to the tool: data-trigger="<selector of the sample button>"
+  $("[data-trigger]").forEach(function (a) {
+    a.addEventListener("click", function () {
+      var sel = a.getAttribute("data-trigger");
+      setTimeout(function () { var b = document.querySelector(sel); if (b) b.click(); }, 700);
+    });
+  });
+})();
