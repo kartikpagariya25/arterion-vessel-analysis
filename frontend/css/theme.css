@@ -11,10 +11,27 @@
   --severe: #cf3b2e;
   /* aliases the tool stylesheet reads */
   --accent: var(--brand-2); --accent-ink: #ffffff; --accent-deep: var(--brand-1);
-  --accent-soft: color-mix(in srgb, var(--brand-2) 12%, #ffffff);
-  --solid: #ffffff; --surface: #ffffff; --dim: var(--muted); --paper: #ffffff;
+  --accent-soft: color-mix(in srgb, var(--brand-2) 12%, var(--card));
+  --solid: var(--card); --surface: var(--card); --dim: var(--muted); --paper: var(--card);
   --r-card: 20px; --r-media: 16px; --r-stage: 20px; --r-plate: 18px; --r-screen: 14px; --r-in: 16px;
   --ease: cubic-bezier(.16, 1, .3, 1);
   --font: var(--font-body); --sans: var(--font-body); --display: var(--font-body); --mono: var(--font-mono);
   --shadow: 0 1px 2px rgba(15, 23, 42, .04), 0 24px 48px -36px rgba(15, 23, 42, .4);
+  /* glass surfaces and link colours; the dark theme overrides these */
+  --nav-bg: rgba(255, 255, 255, .82); --glass: rgba(255, 255, 255, .78); --glass-2: rgba(255, 255, 255, .62);
+  --link: var(--brand-2); --em-from: var(--brand-1);
+}
+html[data-theme="dark"] {
+  --bg: #051a19; --soft: #08201f; --card: #0c2a28; --ink: #e2f6f3; --muted: #8db3ae; --line: #163b38;
+  --badge-bg: #0f3a36; --badge-ink: #5eead4; --link: #5eead4; --em-from: #5eead4;
+  --nav-bg: rgba(5, 26, 25, .82); --glass: rgba(12, 42, 40, .72); --glass-2: rgba(12, 42, 40, .6);
+  --glow-strong: color-mix(in srgb, var(--brand-3) 45%, transparent);
+}
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) {
+  --bg: #051a19; --soft: #08201f; --card: #0c2a28; --ink: #e2f6f3; --muted: #8db3ae; --line: #163b38;
+  --badge-bg: #0f3a36; --badge-ink: #5eead4; --link: #5eead4; --em-from: #5eead4;
+  --nav-bg: rgba(5, 26, 25, .82); --glass: rgba(12, 42, 40, .72); --glass-2: rgba(12, 42, 40, .6);
+  --glow-strong: color-mix(in srgb, var(--brand-3) 45%, transparent);
+  }
 }
