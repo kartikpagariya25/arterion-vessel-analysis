@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Dark mode: token-driven dark theme for the landing page, the tool, the account dialog and the history page, with a navigation toggle that follows the system and remembers your choice.
 - Redesigned the site as a landing page: floating navigation, serif hero, feature cards, four-step process, dark evidence section with the real held-out metrics, GSAP ScrollTrigger scroll animation and Motion springs. Heart imagery removed.
 - Motion upgrade: word-by-word headline with overshoot, depth-layered parallax background, focus-pull reveals, and a live hero graphic (ECG, ejection rings, ventricle contour or arterial flow) that is capped at 30 fps and freezes on slow devices.
 - Redesigned site: soft cool and warm palette, new type, motion (aurora background, staggered entrance, scroll reveals, spotlight cards), restyled account dialog and history page.
