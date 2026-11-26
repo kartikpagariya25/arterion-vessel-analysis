@@ -198,3 +198,8 @@ html.lp-anim .lp-badge, html.lp-anim .lp-hero h1 .ln, html.lp-anim .lp-lead, htm
   .lp-panel { padding: 22px; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .lp-scroll::after, .status.ok i { animation: none; } }
+
+/* Accessibility: skip link and a stable main landmark. */
+.skip { position: fixed; left: 16px; top: -64px; z-index: 120; padding: 12px 20px; border-radius: 12px; background: var(--ink); color: #fff; font-weight: 600; transition: top .25s; }
+.skip:focus { top: 14px; }
+main { display: block; }
