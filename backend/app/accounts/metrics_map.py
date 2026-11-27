@@ -16,4 +16,5 @@ def _peak_stenosis(result: dict) -> Optional[float]:
 
 METRICS: Dict[str, Tuple[str, str, Callable[[dict], Optional[float]]]] = {
     "vessel-analysis": ("Peak stenosis", "%", _peak_stenosis),
+    "vessel-analysis-video": ("Peak stenosis (video)", "%", _peak_stenosis),
 }
