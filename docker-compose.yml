@@ -9,6 +9,8 @@ services:
       - JWT_SECRET=${JWT_SECRET:-}
       - DOCTOR_INVITE_CODE=${DOCTOR_INVITE_CODE:-}
       - REQUIRE_AUTH=${REQUIRE_AUTH:-}
+      - CORS_ORIGINS=${CORS_ORIGINS:-}
+      - UPLOAD_TTL_HOURS=${UPLOAD_TTL_HOURS:-}
     volumes:
       - ./backend/app/vessel_analysis/weights:/srv/app/vessel_analysis/weights:ro
       - data:/data
@@ -16,7 +18,9 @@ services:
   frontend:
     build: ./frontend
     ports: ["8080:80"]
-    depends_on: [backend]
+    depends_on:
+      backend:
+        condition: service_healthy
     restart: unless-stopped
 volumes:
   data:
