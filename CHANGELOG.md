@@ -1,6 +1,10 @@
 # Changelog
 
 ## Unreleased
+- Operations: security headers and an `X-Request-Id` on every response, `CORS_ORIGINS`, `GET /ready` (database and upload directory), and `UPLOAD_TTL_HOURS` to purge old uploads.
+- History tools: CSV export for patients and doctors, per-task trend series, and a Trends tab with a theme-aware chart on the history page.
+- Containers: the API runs as a non-root user, both images have health checks and compose waits for the API. The web server gzips, sets security headers and cache rules, and returns a real 404 page.
+- Quality: ruff and a frontend syntax check run in CI (`make lint` locally), Dependabot watches pip, Docker and Actions, and there is a deployment guide in `docs/DEPLOYMENT.md`.
 - Dark mode: token-driven dark theme for the landing page, the tool, the account dialog and the history page, with a navigation toggle that follows the system and remembers your choice.
 - Redesigned the site as a landing page: floating navigation, serif hero, feature cards, four-step process, dark evidence section with the real held-out metrics, GSAP ScrollTrigger scroll animation and Motion springs. Heart imagery removed.
 - Motion upgrade: word-by-word headline with overshoot, depth-layered parallax background, focus-pull reveals, and a live hero graphic (ECG, ejection rings, ventricle contour or arterial flow) that is capped at 30 fps and freezes on slow devices.

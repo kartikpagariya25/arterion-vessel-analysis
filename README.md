@@ -59,6 +59,11 @@ Under the hood: SQLite, passwords hashed with scrypt, HS256 JWTs, and a lockout 
 | `POST /auth/register`, `POST /auth/login` | anyone | create an account / get a token |
 | `GET /auth/me`, `POST /auth/password`, `DELETE /auth/me` | signed in | profile, change password, delete account and data |
 | `GET /history`, `GET /history/{id}`, `DELETE /history/{id}` | signed in | the caller's own saved analyses |
+| `GET /history/export.csv` | signed in | the caller's saved analyses as a CSV file |
+| `GET /history/series?task=` | signed in | the headline value (peak stenosis (images and angiogram videos)) of each saved analysis for that task, oldest first, for charting |
+| `GET /doctor/analyses/export.csv` | doctor | all analyses as CSV; filter with `patient_id`, `task`, `reviewed` |
+| `GET /doctor/patients/{id}/series?task=` | doctor | the same series for one patient |
+| `GET /health`, `GET /ready` | anyone | liveness, and readiness (database and upload directory) |
 | `GET /doctor/patients`, `GET /doctor/analyses[/{id}]` | doctor | all patients and their analyses |
 | `POST /doctor/analyses/{id}/review` | doctor | add or update a review note |
 
@@ -119,6 +124,7 @@ Tests: `cd backend && pytest tests`.
 - [Model card](MODEL_CARD.md): data, results and limitations
 - [Changelog](CHANGELOG.md)
 - No Docker? Run `scripts/run_local.ps1` (Windows) or `scripts/run_local.sh` (macOS/Linux); it creates a virtual environment, starts the API on 8000 and the site on 8080. Needs Python 3.11.
+- [Deployment](docs/DEPLOYMENT.md): configuration, health checks, backups and putting it on a server
 - [Contributing](CONTRIBUTING.md)
 - [Security and privacy](SECURITY.md)
 
