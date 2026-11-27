@@ -6,6 +6,21 @@ on:
   pull_request:
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Ruff
+        run: pip install ruff==0.17.6 && ruff check .
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Frontend syntax
+        run: for f in frontend/js/*.js; do node --check "$f"; done
+
   backend:
     runs-on: ubuntu-latest
     steps:
