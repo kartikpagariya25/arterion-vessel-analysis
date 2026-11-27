@@ -17,6 +17,74 @@
   function clear(el) { while (el.firstChild) el.removeChild(el.firstChild); return el; }
   function msg(text, kind) { return h("p", { class: "acc-msg" + (kind ? " " + kind : ""), role: kind === "err" ? "alert" : null }, text); }
 
+  function exportButton(path, filename, label) {
+    var b = h("button", { type: "button", class: "acc-btn" }, label || "Export CSV");
+    b.addEventListener("click", function () {
+      b.disabled = true;
+      A.download(path(), filename)
+        .catch(function (e) { A.toast(e.message); })
+        .then(function () { b.disabled = false; });
+    });
+    return b;
+  }
+  function query(p) {
+    var s = Object.keys(p).filter(function (k) { return p[k] !== null && p[k] !== undefined && p[k] !== ""; })
+      .map(function (k) { return encodeURIComponent(k) + "=" + encodeURIComponent(p[k]); }).join("&");
+    return s ? "?" + s : "";
+  }
+
+  /* ---------- trend chart (inline SVG, follows the page theme) ---------- */
+  var NS = "http://www.w3.org/2000/svg";
+  function svg(name, attrs, kids) {
+    var el = document.createElementNS(NS, name);
+    Object.keys(attrs || {}).forEach(function (k) { el.setAttribute(k, attrs[k]); });
+    (kids || []).forEach(function (c) { el.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return el;
+  }
+  function num(v) { return String(Math.round(v * 10) / 10); }
+  function day(iso) { try { return new Date(iso).toLocaleDateString([], { month: "short", day: "numeric" }); } catch (e) { return ""; } }
+
+  function chart(s) {
+    var pts = s.points || [], unit = s.unit ? " " + s.unit : "";
+    if (!pts.length) return h("div", { class: "acc-empty" }, "No saved results with this measurement yet.");
+    var W = 640, H = 250, L = 48, R = 20, T = 20, B = 36;
+    var vals = pts.map(function (p) { return p.value; });
+    var min = Math.min.apply(null, vals), max = Math.max.apply(null, vals);
+    var lo = min, hi = max;
+    if (lo === hi) { lo -= 1; hi += 1; } else { var pad = (hi - lo) * 0.2; lo -= pad; hi += pad; }
+    if (min >= 0 && lo < 0) lo = 0;
+    var x = function (i) { return pts.length === 1 ? (L + (W - L - R) / 2) : L + i * (W - L - R) / (pts.length - 1); };
+    var y = function (v) { return T + (hi - v) * (H - T - B) / (hi - lo); };
+
+    var g = svg("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": (s.label || "Value") + " across " + pts.length + " saved analyses, from " + num(vals[0]) + unit + " to " + num(vals[vals.length - 1]) + unit });
+    for (var t = 0; t <= 3; t++) {
+      var v = lo + (hi - lo) * t / 3, yy = y(v);
+      g.appendChild(svg("line", { class: "grid", x1: L, x2: W - R, y1: yy, y2: yy }));
+      g.appendChild(svg("text", { class: "tick", x: L - 8, y: yy + 4, "text-anchor": "end" }, [num(v)]));
+    }
+    if (pts.length > 1) {
+      var d = pts.map(function (p, i) { return (i ? "L" : "M") + x(i).toFixed(1) + " " + y(p.value).toFixed(1); }).join(" ");
+      g.appendChild(svg("path", { class: "area", d: d + " L" + x(pts.length - 1).toFixed(1) + " " + (H - B) + " L" + x(0).toFixed(1) + " " + (H - B) + " Z" }));
+      g.appendChild(svg("path", { class: "line", d: d }));
+    }
+    pts.forEach(function (p, i) {
+      g.appendChild(svg("circle", { class: "dot", cx: x(i), cy: y(p.value), r: 4.5 }, [svg("title", {}, [num(p.value) + unit + ", " + when(p.created_at)])]));
+    });
+    g.appendChild(svg("text", { class: "tick", x: x(0), y: H - 10, "text-anchor": pts.length === 1 ? "middle" : "start" }, [day(pts[0].created_at)]));
+    if (pts.length > 1) g.appendChild(svg("text", { class: "tick", x: x(pts.length - 1), y: H - 10, "text-anchor": "end" }, [day(pts[pts.length - 1].created_at)]));
+
+    var last = vals[vals.length - 1], change = last - vals[0];
+    var stat = function (k, v) { return h("div", {}, h("span", {}, k), h("b", {}, v)); };
+    var stats = h("div", { class: "acc-stats" },
+      stat("Latest", num(last) + unit),
+      stat("Lowest", num(min) + unit),
+      stat("Highest", num(max) + unit),
+      pts.length > 1 ? stat("Change since first", (change > 0 ? "+" : "") + num(change) + unit) : stat("Analyses", "1"));
+    var out = h("div", { class: "acc-chart" }, stats, g);
+    if (pts.length === 1) out.appendChild(h("p", { class: "acc-msg" }, "Run another analysis to see how this changes over time."));
+    return out;
+  }
+
   /* ---------- result rendering ---------- */
   function scalar(v) {
     if (v === null || v === undefined) return "-";
@@ -185,9 +253,32 @@
         { doctor: true, onReviewed: refreshCount, emptyText: awaitingOnly ? "Nothing is waiting for review." : "No analyses match." });
     }
     taskSel.addEventListener("change", reload); statusSel.addEventListener("change", reload);
-    host.appendChild(h("div", { class: "acc-tools" }, taskSel, awaitingOnly ? null : statusSel, chip));
+    var trend = h("button", { type: "button", class: "acc-btn", hidden: !patientFilter, onclick: function () { goto("trends"); } }, "Trends");
+    var exp = exportButton(function () {
+      return "/doctor/analyses/export.csv" + query({ patient_id: patientFilter && patientFilter.id, task: taskSel.value, reviewed: statusSel.value });
+    }, "arterion-analyses.csv");
+    host.appendChild(h("div", { class: "acc-tools" }, taskSel, awaitingOnly ? null : statusSel, chip, trend, exp));
     host.appendChild(list);
     reload();
+  }
+
+  function trendsTab(host) {
+    var doctor = A.user.role === "doctor";
+    if (doctor && !patientFilter) {
+      host.appendChild(h("div", { class: "acc-empty" }, "Choose a patient on the Patients tab to see how their results change over time."));
+      return;
+    }
+    var base = doctor ? "/doctor/patients/" + patientFilter.id + "/series" : "/history/series";
+    if (doctor) host.appendChild(h("p", { class: "acc-msg" }, "Showing results for " + patientFilter.name + "."));
+    Object.keys(APP.tasks || {}).forEach(function (t) {
+      var box = h("div", { class: "acc-section" }, h("h2", {}, taskName(t)), msg("Loading…"));
+      host.appendChild(box);
+      A.api("GET", base + "?task=" + encodeURIComponent(t)).then(function (s) {
+        clear(box);
+        box.appendChild(h("h2", {}, (s.label || taskName(t)) + " over time"));
+        box.appendChild(chart(s));
+      }).catch(function (e) { clear(box).appendChild(msg(e.message, "err")); });
+    });
   }
 
   function accountTab(host) {
@@ -234,8 +325,8 @@
     }
     var doctor = u.role === "doctor";
     var tabs = doctor
-      ? [["awaiting", "Awaiting review"], ["all", "All analyses"], ["patients", "Patients"], ["mine", "My analyses"], ["account", "Account"]]
-      : [["history", "My history"], ["account", "Account"]];
+      ? [["awaiting", "Awaiting review"], ["all", "All analyses"], ["patients", "Patients"], ["trends", "Trends"], ["mine", "My analyses"], ["account", "Account"]]
+      : [["history", "My history"], ["trends", "Trends"], ["account", "Account"]];
     var hash = (location.hash || "").slice(1);
     if (!tabId) tabId = tabs.some(function (t) { return t[0] === hash; }) ? hash : tabs[0][0];
     var bar = h("div", { class: "acc-tabbar", role: "tablist" });
@@ -255,8 +346,12 @@
     }
     refreshCount();
     if (tabId === "history" || tabId === "mine") {
-      pagedList(host, "/history", {}, { canDelete: true, emptyText: "No saved analyses yet. Sign in and run an analysis; it will appear here." });
-    } else if (tabId === "awaiting") allTab(host, true, refreshCount);
+      var list = h("div", {});
+      host.appendChild(h("div", { class: "acc-tools" }, exportButton(function () { return "/history/export.csv"; }, "arterion-history.csv")));
+      host.appendChild(list);
+      pagedList(list, "/history", {}, { canDelete: true, emptyText: "No saved analyses yet. Sign in and run an analysis; it will appear here." });
+    } else if (tabId === "trends") trendsTab(host);
+    else if (tabId === "awaiting") allTab(host, true, refreshCount);
     else if (tabId === "all") allTab(host, false, refreshCount);
     else if (tabId === "patients") patientsTab(host, goto);
     else if (tabId === "account") accountTab(host);

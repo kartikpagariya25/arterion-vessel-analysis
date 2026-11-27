@@ -61,6 +61,30 @@
       });
   }
 
+  /* Download a file from the API (the Authorization header cannot ride on a plain link). */
+  function download(path, filename) {
+    var headers = {};
+    if (state.token) headers["Authorization"] = "Bearer " + state.token;
+    return nativeFetch(API + path, { headers: headers })
+      .catch(function () { throw new Error("Cannot reach the server. Is the API running?"); })
+      .then(function (res) {
+        if (res.ok) return res.blob();
+        return res.json().catch(function () { return {}; }).then(function (data) {
+          if (res.status === 401 && state.token) signOut(true);
+          var err = new Error(fmtDetail(data.detail));
+          err.status = res.status;
+          throw err;
+        });
+      })
+      .then(function (blob) {
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url; a.download = filename;
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+      });
+  }
+
   function setSession(resp) {
     state.token = resp.access_token;
     state.user = resp.user;
@@ -302,6 +326,7 @@
     get user() { return state.user; },
     get token() { return state.token; },
     api: call,
+    download: download,
     open: openModal,
     signOut: function () { signOut(false); },
     onChange: function (fn) { listeners.push(fn); fn(state.user); },
