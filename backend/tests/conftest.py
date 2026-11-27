@@ -33,10 +33,10 @@ def task_request(monkeypatch):
 
     from app.vessel_analysis import router
 
-    monkeypatch.setattr(router, "predict", lambda url: {"summary": "ok", "lesion_count": 60.0, "big_image": "x" * 5000, "series": list(range(500))})
+    monkeypatch.setattr(router, "predict", lambda url: {"summary": "ok", "lesion_count": 60.0, "lesions": [{"stenosis_percent": 40.0}, {"stenosis_percent": 60.0}], "big_image": "x" * 5000, "series": list(range(500))})
 
     def make_body(url):
         return {"file_url": url}
 
-    return SimpleNamespace(url="/vessel-analysis/predict", task="vessel-analysis", key="lesion_count",
+    return SimpleNamespace(url="/vessel-analysis/predict", task="vessel-analysis", key="lesion_count", metric_value=60.0,
                            make_body=make_body, body=make_body("http://testserver/static_uploads/abc123.png"))

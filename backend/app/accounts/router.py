@@ -9,7 +9,7 @@ from typing import Literal, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from pydantic import BaseModel, Field, field_validator
 
-from . import db, security
+from . import db, exports, security
 from .deps import current_user, require_doctor
 from .history import now_iso
 
@@ -165,6 +165,25 @@ def list_history(limit: int = Query(20, ge=1, le=100), offset: int = Query(0, ge
     return {"items": [_summary_row(r) for r in rows], "total": total}
 
 
+@router.get("/history/export.csv")
+def export_history(user: dict = Depends(current_user)):
+    with db.connect() as conn:
+        rows = conn.execute(_DETAIL_SQL + " WHERE a.user_id = ? ORDER BY a.id DESC LIMIT ?",
+                            (user["id"], exports.MAX_EXPORT_ROWS)).fetchall()
+    return exports.csv_response("arterion-history.csv", exports.PATIENT_COLUMNS, (exports.export_row(r) for r in rows))
+
+
+def _series_rows(user_id: int, task: str):
+    with db.connect() as conn:
+        return conn.execute("SELECT id, created_at, result_json FROM analyses WHERE user_id = ? AND task = ? ORDER BY id",
+                            (user_id, task)).fetchall()
+
+
+@router.get("/history/series")
+def history_series(task: str = Query(..., max_length=60), user: dict = Depends(current_user)):
+    return exports.series_for(task, _series_rows(user["id"], task))
+
+
 @router.get("/history/{analysis_id}")
 def get_history_item(analysis_id: int, user: dict = Depends(current_user)):
     with db.connect() as conn:
@@ -205,16 +224,7 @@ def doctor_patients(q: Optional[str] = Query(None, max_length=80), doctor: dict 
 def doctor_analyses(patient_id: Optional[int] = None, task: Optional[str] = Query(None, max_length=60),
                     reviewed: Optional[bool] = None, limit: int = Query(20, ge=1, le=100), offset: int = Query(0, ge=0),
                     doctor: dict = Depends(require_doctor)):
-    where, args = ["p.role = 'patient'"], []
-    if patient_id is not None:
-        where.append("a.user_id = ?")
-        args.append(patient_id)
-    if task:
-        where.append("a.task = ?")
-        args.append(task)
-    if reviewed is not None:
-        where.append("a.reviewed_at IS NOT NULL" if reviewed else "a.reviewed_at IS NULL")
-    clause = " WHERE " + " AND ".join(where)
+    clause, args = _doctor_filters(patient_id, task, reviewed)
     with db.connect() as conn:
         total = conn.execute("SELECT COUNT(*) FROM analyses a JOIN users p ON p.id = a.user_id" + clause, args).fetchone()[0]
         rows = conn.execute(_DETAIL_SQL + clause + " ORDER BY a.id DESC LIMIT ? OFFSET ?", args + [limit, offset]).fetchall()
@@ -230,6 +240,37 @@ def _doctor_detail(analysis_id: int) -> dict:
     d = _detail(row)
     d["patient"] = {"id": row["patient_id"], "name": row["patient_name"], "email": row["patient_email"]}
     return d
+
+
+def _doctor_filters(patient_id, task, reviewed):
+    where, args = ["p.role = 'patient'"], []
+    if patient_id is not None:
+        where.append("a.user_id = ?")
+        args.append(patient_id)
+    if task:
+        where.append("a.task = ?")
+        args.append(task)
+    if reviewed is not None:
+        where.append("a.reviewed_at IS NOT NULL" if reviewed else "a.reviewed_at IS NULL")
+    return " WHERE " + " AND ".join(where), args
+
+
+@router.get("/doctor/analyses/export.csv")
+def doctor_export(patient_id: Optional[int] = None, task: Optional[str] = Query(None, max_length=60),
+                  reviewed: Optional[bool] = None, doctor: dict = Depends(require_doctor)):
+    clause, args = _doctor_filters(patient_id, task, reviewed)
+    with db.connect() as conn:
+        rows = conn.execute(_DETAIL_SQL + clause + " ORDER BY a.id DESC LIMIT ?", args + [exports.MAX_EXPORT_ROWS]).fetchall()
+    return exports.csv_response("arterion-analyses.csv", exports.DOCTOR_COLUMNS, (exports.export_row(r) for r in rows))
+
+
+@router.get("/doctor/patients/{patient_id}/series")
+def doctor_patient_series(patient_id: int, task: str = Query(..., max_length=60), doctor: dict = Depends(require_doctor)):
+    with db.connect() as conn:
+        patient = conn.execute("SELECT id FROM users WHERE id = ? AND role = 'patient'", (patient_id,)).fetchone()
+    if patient is None:
+        raise HTTPException(status_code=404, detail="That patient was not found.")
+    return exports.series_for(task, _series_rows(patient_id, task))
 
 
 @router.get("/doctor/analyses/{analysis_id}")
