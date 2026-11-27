@@ -53,7 +53,7 @@ def _fallback_report(analysis: dict) -> dict:
             "disclaimer": {"english": disclaimer_en, "hindi": disclaimer_hi, "marathi": disclaimer_mr},
         }
 
-    worst = max(lesions, key=lambda l: l["stenosis_percent"])
+    worst = max(lesions, key=lambda lesion: lesion["stenosis_percent"])
     pct = worst["stenosis_percent"]
     band = worst["severity_band"]
     confidence = worst.get("confidence")

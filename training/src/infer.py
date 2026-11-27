@@ -75,7 +75,7 @@ class VesselAnalyzer:
         _, buffer = cv2.imencode(".png", overlay)
 
         if lesions:
-            worst = max(lesions, key=lambda l: l["stenosis_percent"])
+            worst = max(lesions, key=lambda lesion: lesion["stenosis_percent"])
             summary = f"{len(lesions)} lesion(s) detected. Most severe: ~{worst['stenosis_percent']}% narrowing ({worst['severity_band']})."
             confidence = 0.75
         else:

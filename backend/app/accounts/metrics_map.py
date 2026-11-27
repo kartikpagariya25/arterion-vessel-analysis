@@ -9,7 +9,7 @@ def _number(value) -> Optional[float]:
 
 
 def _peak_stenosis(result: dict) -> Optional[float]:
-    values = [_number(l.get("stenosis_percent")) for l in result.get("lesions") or [] if isinstance(l, dict)]
+    values = [_number(lesion.get("stenosis_percent")) for lesion in result.get("lesions") or [] if isinstance(lesion, dict)]
     values = [v for v in values if v is not None]
     return max(values) if values else None
 

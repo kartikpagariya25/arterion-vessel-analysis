@@ -1,6 +1,5 @@
 import os
 import tempfile
-import requests
 import cv2
 
 from ..common import InvalidInput, fetch_bytes
@@ -69,7 +68,7 @@ def predict_video(file_url: str, frame_stride: int = 5) -> dict:
                 overlay_lesions.append((bbox, round(pct, 1), band, confidence))
 
             frames_analyzed += 1
-            score = max((l["stenosis_percent"] for l in lesions), default=0.0)
+            score = max((lesion["stenosis_percent"] for lesion in lesions), default=0.0)
 
             if score > best_score:
                 best_score = score
@@ -95,7 +94,7 @@ def predict_video(file_url: str, frame_stride: int = 5) -> dict:
         original_b64 = base64.b64encode(best_result["original_bytes"]).decode("utf-8") if best_result else None
         lesions = []
     else:
-        worst = max(best_result["lesions"], key=lambda l: l["stenosis_percent"])
+        worst = max(best_result["lesions"], key=lambda lesion: lesion["stenosis_percent"])
         summary = f"Worst frame ({best_result['frame_index']}): {len(best_result['lesions'])} lesion(s), most severe ~{worst['stenosis_percent']}% ({worst['severity_band']}, {worst['confidence']}% confidence)."
         key_frame = best_result["frame_index"]
         overlay_b64 = base64.b64encode(best_result["overlay_bytes"]).decode("utf-8")

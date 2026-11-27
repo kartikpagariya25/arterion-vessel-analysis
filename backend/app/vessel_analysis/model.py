@@ -2,7 +2,6 @@ import os
 import base64
 import numpy as np
 import cv2
-import requests
 from PIL import Image, ImageDraw, ImageFont
 
 from ..common import InvalidInput, fetch_bytes
@@ -189,7 +188,7 @@ def predict(file_url: str) -> dict:
     overlay_base64 = base64.b64encode(overlay_bytes).decode("utf-8")
 
     if lesions:
-        worst = max(lesions, key=lambda l: l["stenosis_percent"])
+        worst = max(lesions, key=lambda lesion: lesion["stenosis_percent"])
         summary = f"{len(lesions)} lesion(s) detected. Most severe: ~{worst['stenosis_percent']}% narrowing ({worst['severity_band']}, {worst['confidence']}% confidence)."
     else:
         summary = "No significant stenosis detected in the analyzed frame."

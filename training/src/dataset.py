@@ -5,7 +5,7 @@ import torch
 from torch.utils.data import Dataset
 import albumentations as A
 
-from config import PROCESSED_DIR, IMAGE_SIZE
+from config import PROCESSED_DIR
 
 
 def build_train_transform():
